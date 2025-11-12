@@ -1,3 +1,4 @@
+import os
 import sqlite3
 import json
 import datetime
@@ -12,6 +13,10 @@ class SessionManager:
 
     def __init__(self, db_path: str = "artifacts/conversation_memory.db"):
         self.db_path = db_path
+
+        # ✅ Ensure folder exists (fix for Streamlit Cloud)
+        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+
         self._init_db()
 
     # -------------------------------------------------
@@ -24,6 +29,7 @@ class SessionManager:
         with self._connect() as conn:
             cur = conn.cursor()
 
+            # --- sessions table ---
             cur.execute("""
             CREATE TABLE IF NOT EXISTS sessions (
                 id TEXT PRIMARY KEY,
@@ -33,6 +39,7 @@ class SessionManager:
             )
             """)
 
+            # --- messages table ---
             cur.execute("""
             CREATE TABLE IF NOT EXISTS messages (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,6 +53,20 @@ class SessionManager:
                 FOREIGN KEY(session_id) REFERENCES sessions(id)
             )
             """)
+
+            # --- Reflexion Learner table (intent classification memory) ---
+            cur.execute("""
+            CREATE TABLE IF NOT EXISTS reflexion_medical_rag (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                session_id TEXT,
+                message TEXT,
+                label TEXT,
+                confidence REAL,
+                created_at TEXT,
+                FOREIGN KEY(session_id) REFERENCES sessions(id)
+            )
+            """)
+
             conn.commit()
 
     # -------------------------------------------------
@@ -138,52 +159,6 @@ class SessionManager:
                 {"session_id": r[0], "created_at": r[1], "updated_at": r[2]}
                 for r in rows
             ]
-
-
-        # -------------------------------------------------
-    def _init_db(self):
-        """Create tables if not exist."""
-        with self._connect() as conn:
-            cur = conn.cursor()
-
-            # existing tables
-            cur.execute("""
-            CREATE TABLE IF NOT EXISTS sessions (
-                id TEXT PRIMARY KEY,
-                created_at TEXT,
-                updated_at TEXT,
-                summary TEXT
-            )
-            """)
-
-            cur.execute("""
-            CREATE TABLE IF NOT EXISTS messages (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                session_id TEXT,
-                timestamp TEXT,
-                speaker TEXT,
-                original TEXT,
-                deidentified TEXT,
-                translation TEXT,
-                context TEXT,
-                FOREIGN KEY(session_id) REFERENCES sessions(id)
-            )
-            """)
-
-            # 🆕 NEW: Reflexion Learner Table for Intent Classification
-            cur.execute("""
-            CREATE TABLE IF NOT EXISTS reflexion_medical_rag (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                session_id TEXT,
-                message TEXT,
-                label TEXT,
-                confidence REAL,
-                created_at TEXT,
-                FOREIGN KEY(session_id) REFERENCES sessions(id)
-            )
-            """)
-
-            conn.commit()
 
     # -------------------------------------------------
     def save_medical_rag_reflexion(self, session_id: str, message: str, label: str, confidence: float):

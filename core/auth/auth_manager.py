@@ -1,3 +1,4 @@
+import os
 import sqlite3
 import bcrypt
 import datetime
@@ -9,9 +10,14 @@ class AuthManager:
 
     def __init__(self, db_path: str = "artifacts/conversation_memory.db"):
         self.db_path = db_path
+
+        # ✅ Ensure the artifacts folder exists (important for Streamlit Cloud)
+        os.makedirs(os.path.dirname(self.db_path), exist_ok=True)
+
         self._init_db()
 
     def _connect(self):
+        """Open SQLite connection."""
         return sqlite3.connect(self.db_path)
 
     def _init_db(self):
