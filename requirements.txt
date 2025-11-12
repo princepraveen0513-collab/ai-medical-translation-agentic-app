@@ -1,0 +1,9 @@
+streamlit
+openai
+pinecone-client
+python-dotenv
+bcrypt
+spacy
+langdetect
+tqdm
+pandas
