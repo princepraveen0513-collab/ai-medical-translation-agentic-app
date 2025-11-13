@@ -34,41 +34,41 @@ Built with multi-agent coordination, retrieval-augmented generation (RAG), and r
 
 ### Login & Registration
 
-![login](images/login.png)
+![login](AppImages/login.png)
 
 ### Doctor Side
 
-![doctor](images/doctor_side.png)
+![doctor](AppImages/doctor_side.png)
 
 ### Patient Side
 
-![patient](images/patient_side.png)
+![patient](AppImages/patient_side.png)
 
 ### Conversation Flow
 
-![conversation_flow](images/conversation_flow.png)
+![conversation_flow](AppImages/conversation_flow.png)
 
 ## Medical Context of Patient Side Tile
 
 From the translation of: मुझे ऐसा लगता है जैसे सीने में कोई जकड़ गया हो, सांस ऊपर तक आ रही है, लगता है दम निकल जाएगा
-![medical_context](images/medical_context.png)
+![medical_context](AppImages/medical_context.png)
 
 ## Cultural Context of Patient Side Tile
 
 From the translation of: मुझे ऐसा लगता है जैसे सीने में कोई जकड़ गया हो, सांस ऊपर तक आ रही है, लगता है दम निकल जाएगा
-![cultural_context](images/cultural_context.png)
+![cultural_context](AppImages/cultural_context.png)
 
 ### Conversation Summary
 
-![summary](images/summary.png)
+![summary](AppImages/summary.png)
 
 ### Conversation Window
 
-![conversation_window](images/conversation_window.png)
+![conversation_window](AppImages/conversation_window.png)
 
 ### Tables
 
-![tables](images/tables.png)
+![tables](AppImages/tables.png)
 
 ---
 
